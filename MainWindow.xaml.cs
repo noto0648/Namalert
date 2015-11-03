@@ -47,7 +47,7 @@ namespace NamaAlert
 
         private void ButtonTest_Click(object sender, RoutedEventArgs e)
         {
-            //NewInfomation(10000, @"http://lkappa.zashiki.com/nap.html").Show();
+            
         }
 
         public InfoWindow NewInfomation(int time, string url)
@@ -56,7 +56,7 @@ namespace NamaAlert
             return iw;
         }
 
-        System.Windows.Threading.Dispatcher Dispatcher
+        public System.Windows.Threading.Dispatcher OwnerDispatcher
         {
             get { return this.Dispatcher; }
         }

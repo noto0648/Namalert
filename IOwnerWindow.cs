@@ -8,7 +8,7 @@ namespace NamaAlert
 {
     public interface IOwnerWindow
     {
-        System.Windows.Threading.Dispatcher Dispatcher { get; }
+        System.Windows.Threading.Dispatcher OwnerDispatcher { get; }
         InfoWindow NewInfomation(int time, string url);
     }
 }

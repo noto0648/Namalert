@@ -2,16 +2,16 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        Title="Namalert" Height="350" Width="525" Closing="MainWindow_Closing">
+        Title="Namalert" Height="375.719" Width="604.393" Closing="MainWindow_Closing" Loaded="MainWindow_Loaded">
     <Grid>
-        <TabControl HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" TabStripPlacement="Left" Height="300" Width="497">
+        <TabControl HorizontalAlignment="Stretch" Margin="10,10,10,10" VerticalAlignment="Stretch" VerticalContentAlignment="Center" TabStripPlacement="Left" Height="Auto" Width="Auto">
             <TabItem Header="Niconico">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="#FFE5E5E5" Margin="10,10,10,10" Width="Auto" Height="Auto">
                     <Button x:Name="ButtonAlertStart" Content="Begin" HorizontalAlignment="Left" Margin="279,255,0,0" VerticalAlignment="Top" Width="75" Click="ButtonAlertStart_Click"/>
-                    <ListView HorizontalAlignment="Left" Height="240" Margin="10,10,0,0" VerticalAlignment="Top" Width="344" ItemsSource="{Binding}">
+                    <ListView x:Name="NiconicoCommunityList" HorizontalAlignment="Left" Height="240" Margin="10,10,0,0" VerticalAlignment="Top" Width="344" ItemsSource="{Binding}">
                         <ListView.View>
                             <GridView>
-                            <GridViewColumn Header="Community" DisplayMemberBinding="{Binding CommunityName}" Width="Auto" />
+                                <GridViewColumn Header="Community" DisplayMemberBinding="{Binding CommunityName}" Width="Auto" />
                                 <GridViewColumn Header="ID" DisplayMemberBinding="{Binding CommunityId}" Width="Auto" />
                                 <GridViewColumn Header="Enable" Width="Auto">
                                     <GridViewColumn.CellTemplate>
@@ -30,11 +30,26 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
+                    <Button x:Name="ButtonImport" Content="Import" HorizontalAlignment="Left" Margin="10,261,0,0" VerticalAlignment="Top" Width="75" Click="ButtonImport_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Acounts">
+                <Grid Background="#FFE5E5E5" Margin="10,10,10,10" Width="Auto" Height="Auto">
+                    <GroupBox Header="Niconico" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="131" Width="403">
+                        <Grid>
+                            <Label Content="Mail Address" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TextBoxNiconicoMailAddress" HorizontalAlignment="Left" Height="23" Margin="156,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="225"/>
+                            <PasswordBox x:Name="PasswordNiconico" HorizontalAlignment="Left" Height="23" Margin="156,46,0,0" VerticalAlignment="Top" Width="225"/>
+                            <Label Content="Password" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top"/>
+                        </Grid>
+                    </GroupBox>
+                    <Button x:Name="ButtonSave" Content="Save" HorizontalAlignment="Left" Margin="338,261,0,0" VerticalAlignment="Top" Width="75" Click="ButtonSave_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Settings">
-                <Grid Background="#FFE5E5E5">
-                    <Button x:Name="ButtonTest" Content="Test" HorizontalAlignment="Left" Margin="142,60,0,0" VerticalAlignment="Top" Width="75" Click="ButtonTest_Click"/>
+                <Grid Background="#FFE5E5E5" Margin="10,10,10,10" Width="Auto" Height="Auto">
+                    <Button x:Name="ButtonTest" Content="Test" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="ButtonTest_Click" Margin="250,192,0,0"/>
+
                 </Grid>
             </TabItem>
         </TabControl>

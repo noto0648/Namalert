@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 
 namespace NamaAlert
 {
-    class AlertNiconico : IAlertSystem
+    public class AlertNiconico : IAlertSystem
     {
         const string GetAlertInfoUrl = @"http://live.nicovideo.jp/api/getalertinfo";
         const string GetLiveInfoUrl = @"http://live.nicovideo.jp/api/getstreaminfo/lv{0}";
@@ -43,7 +43,7 @@ namespace NamaAlert
         private bool InitAlert()
         {
             _isRunning = true;
-            string xml = GetResponse(GetAlertInfoUrl);
+            string xml = Utils.GetResponse(GetAlertInfoUrl);
             if (xml == null)
             {
                 return false;
@@ -57,7 +57,6 @@ namespace NamaAlert
             _infomation.Address = msList[0].ChildNodes[0].InnerText;
             _infomation.Port = int.Parse(msList[0].ChildNodes[1].InnerText);
             _infomation.Thread = long.Parse(msList[0].ChildNodes[2].InnerText);
-            Console.WriteLine("{0} / {1} / {2}", _infomation.Address, _infomation.Port, _infomation.Thread);
             return true;
         }
 
@@ -133,7 +132,7 @@ namespace NamaAlert
                 window.Show();
                 Task.Factory.StartNew(() =>
                 {
-                    result = GetResponse(string.Format(GetLiveInfoUrl, live));
+                    result = Utils.GetResponse(string.Format(GetLiveInfoUrl, live));
                     XmlDocument doc = new XmlDocument();
                     doc.LoadXml(result);
                     XmlNodeList infos = doc.DocumentElement.GetElementsByTagName("streaminfo");
@@ -154,24 +153,6 @@ namespace NamaAlert
 
         }
 
-        private string GetResponse(string url)
-        {
-            string result = null;
-            try
-            {
-                using (WebClient wc = new WebClient())
-                {
-                    wc.Encoding = Encoding.UTF8;
-                    result = wc.DownloadString(url);
-                }
-            }
-            catch(Exception)
-            {
-                
-            }
-            return result;
-        }
-
         public void Stop()
         {
             if (!_stopFlag)
@@ -179,6 +160,7 @@ namespace NamaAlert
                 _stopFlag = true;
             }
         }
+
 
 
         class AlertInfo
@@ -197,18 +179,7 @@ namespace NamaAlert
 
         }
 
-        public class NiconicoAlertItem
-        {
-            private string _communityName;
-            private string _communityId;
-            private bool _enable;
-            private bool _useBrowser;
-            public string CommunityName { get { return _communityName; } set { _communityName = value; } }
-            public string CommunityId { get { return _communityId; } set { _communityId = value; } }
-            public bool UseBrowser { get { return _useBrowser; } set { _useBrowser = value; } }
-            public bool Enable { get { return _enable; } set { _enable = value; } }
 
-        }
 
     }
 }

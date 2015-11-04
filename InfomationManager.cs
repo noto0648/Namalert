@@ -13,6 +13,9 @@ namespace NamaAlert
 
         private List<InfoWindow> _infoWindows = new List<InfoWindow>();
 
+        private InfomationManager() { }
+
+
         public InfoWindow NewWindow(System.Windows.Window owner, int time = 1000, string url = null)
         {
             InfoWindow iw = new InfoWindow(time, url);

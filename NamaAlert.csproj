@@ -65,6 +65,9 @@
     </ApplicationDefinition>
     <Compile Include="InfomationManager.cs" />
     <Compile Include="IOwnerWindow.cs" />
+    <Compile Include="NiconicoManager.cs" />
+    <Compile Include="SettingData.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="Win32.cs" />
     <Page Include="InfoWindow.xaml">
       <SubType>Designer</SubType>

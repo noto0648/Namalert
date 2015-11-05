@@ -9,6 +9,12 @@
                 <Grid Background="#FFE5E5E5" Margin="10,10,10,10" Width="Auto" Height="Auto">
                     <Button x:Name="ButtonAlertStart" Content="Begin" HorizontalAlignment="Left" Margin="279,255,0,0" VerticalAlignment="Top" Width="75" Click="ButtonAlertStart_Click"/>
                     <ListView x:Name="NiconicoCommunityList" HorizontalAlignment="Left" Height="240" Margin="10,10,0,0" VerticalAlignment="Top" Width="344" ItemsSource="{Binding}">
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="名称の取得(_G)" InputGestureText="Ctrl+G"/>
+                                <MenuItem Header="一覧から削除(_D)" InputGestureText="Ctrl+D" />
+                            </ContextMenu>
+                        </ListView.ContextMenu>
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Community" DisplayMemberBinding="{Binding CommunityName}" Width="Auto" />

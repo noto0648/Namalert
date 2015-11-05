@@ -51,6 +51,38 @@ namespace NamaAlert
             return data;
         }
 
+        public List<NiconicoAlertItem> GetCommunities()
+        {
+            List<NiconicoAlertItem> result = new List<NiconicoAlertItem>();
+            string text = GetStatus();
+
+            if (text != null)
+            {
+                try
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.LoadXml(text);
+
+                    XmlNodeList nodeList = doc.DocumentElement.GetElementsByTagName("communities");
+                    for (int i = 0; i < nodeList[0].ChildNodes.Count; i++)
+                    {
+                        string id = nodeList[0].ChildNodes[i].InnerText;
+                        result.Add(new NiconicoAlertItem() { CommunityId = id, IsChannel = id.StartsWith("co") });
+                    }
+
+                }
+                catch(Exception)
+                {
+
+                }
+            }
+
+
+            
+            return result;
+        }
+
+
         public class NiconicoAlertItem
         {
             private string _communityName;
@@ -62,6 +94,13 @@ namespace NamaAlert
             public bool UseBrowser { get { return _useBrowser; } set { _useBrowser = value; } }
             public bool Enable { get { return _enable; } set { _enable = value; } }
 
+            private bool _isChannel;
+            public bool IsChannel { get { return _isChannel; } set { _isChannel = value; } }
+
+            public NiconicoAlertItem()
+            {
+                _enable = true;
+            }
         }
     }
 }

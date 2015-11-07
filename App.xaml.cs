@@ -13,5 +13,18 @@ namespace NamaAlert
     /// </summary>
     public partial class App : Application
     {
+        private NotifyIconWPF _notifyIcon;
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            _notifyIcon = new NotifyIconWPF();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+            _notifyIcon.Dispose();
+        }
     }
 }

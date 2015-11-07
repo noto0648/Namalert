@@ -21,8 +21,6 @@ namespace NamaAlert
         private bool _stopFlag = false;
         private IOwnerWindow _ownerWindow;
 
-        Random rand = new Random();
-
         public bool IsRunning
         {
             get { return _isRunning; }
@@ -102,11 +100,7 @@ namespace NamaAlert
                                 {
                                     continue;
                                 }
-                                if (rand.Next(4) == 0)
-                                {
-                                    ShowInfomation(infos[0], infos[1], infos[2]);
-
-                                }
+                                ShowInfomation(infos[0], infos[1], infos[2]);
                             }
                         }
                     }
@@ -125,6 +119,13 @@ namespace NamaAlert
 
         private void ShowInfomation(string live, string comu, string user)
         {
+            InfomationType type = NiconicoManager.Instance.GetInfomationType(comu);
+
+            if(type == InfomationType.None)
+            {
+                return;
+            }
+
             string result = null;
 
             System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => {

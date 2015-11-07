@@ -64,8 +64,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="InfomationManager.cs" />
+    <Compile Include="InfomationType.cs" />
     <Compile Include="IOwnerWindow.cs" />
     <Compile Include="NiconicoManager.cs" />
+    <Compile Include="NotifyIconWPF.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SettingData.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Win32.cs" />
@@ -105,6 +109,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="NotifyIconWPF.resx">
+      <DependentUpon>NotifyIconWPF.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

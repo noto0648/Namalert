@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace NamaAlert
 {
@@ -19,6 +20,11 @@ namespace NamaAlert
         private const string StatusParam = @"ticket={0}";
 
         private string _ticket;
+
+        public List<NiconicoAlertItem> Communities { get { return _nicoCommunities; } }
+        private List<NiconicoManager.NiconicoAlertItem> _nicoCommunities = new List<NiconicoManager.NiconicoAlertItem>();
+
+        private object _lock = new object();
 
         private NiconicoManager() { }
 
@@ -51,7 +57,7 @@ namespace NamaAlert
             return data;
         }
 
-        public List<NiconicoAlertItem> GetCommunities()
+        public bool GetCommunities()
         {
             List<NiconicoAlertItem> result = new List<NiconicoAlertItem>();
             string text = GetStatus();
@@ -73,15 +79,52 @@ namespace NamaAlert
                 }
                 catch(Exception)
                 {
-
+                    return false;
                 }
             }
-
-
-            
-            return result;
+            _nicoCommunities = result;
+            return true;
         }
 
+
+        public void LoadCommunities()
+        {
+            string filePath = System.IO.Path.GetFullPath(Utils.GetAppDirectory() + "\\Settings\\Niconico.xml");
+            if (System.IO.File.Exists(filePath))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<NiconicoManager.NiconicoAlertItem>));
+                using (System.IO.StreamReader reader = new System.IO.StreamReader(filePath, Encoding.UTF8))
+                {
+                    _nicoCommunities = (List<NiconicoManager.NiconicoAlertItem>)serializer.Deserialize(reader);
+                    reader.Close();
+                }
+            }
+        }
+
+        public void SaveCommunities()
+        {
+            string filePath = System.IO.Path.GetFullPath(Utils.GetAppDirectory() + "\\Settings\\Niconico.xml");
+            XmlSerializer serializer = new XmlSerializer(typeof(List<NiconicoManager.NiconicoAlertItem>), new Type[] { typeof(NiconicoManager.NiconicoAlertItem) });
+            using (System.IO.StreamWriter writer = new System.IO.StreamWriter(filePath, false))
+            {
+                serializer.Serialize(writer, _nicoCommunities);
+                writer.Close();
+            }
+        }
+
+        public InfomationType GetInfomationType(string communityid)
+        {
+            Console.WriteLine(communityid);
+            lock (_lock)
+            {
+                NiconicoAlertItem index = _nicoCommunities.Find(w => w.CommunityId == communityid);
+                if (index != null)
+                {
+                    return (index.Enable && index.UseBrowser) ? InfomationType.OpenBrowser : (index.Enable) ? InfomationType.Infomation : InfomationType.None;
+                }
+            }
+            return InfomationType.None;
+        }
 
         public class NiconicoAlertItem
         {

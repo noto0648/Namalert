@@ -25,17 +25,22 @@ namespace NamaAlert
         private SettingData _settingData;
         private IAlertSystem _alertSystem;
 
-        private List<NiconicoManager.NiconicoAlertItem> _nicoCommunities = new List<NiconicoManager.NiconicoAlertItem>();
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
+
         private void ButtonAlertStart_Click(object sender, RoutedEventArgs e)
         {
-            _alertSystem = new AlertNiconico();
+            NiconicoAlertStart();
+        }
 
+
+        public void NiconicoAlertStart()
+        {
+            _alertSystem = new AlertNiconico();
             Task.Factory.StartNew(() =>
             {
                 _alertSystem.Start(this);
@@ -106,6 +111,8 @@ namespace NamaAlert
             PasswordNiconico.Password = _settingData.NiconicoPassword;
 
             LoadCommunities();
+
+            NiconicoAlertStart();
         }
 
         public SettingData Settings
@@ -126,7 +133,6 @@ namespace NamaAlert
             {
                 NiconicoManager.Instance.Login(_settingData.NiconicoMailaddress, _settingData.NiconicoPassword);
 
-                _nicoCommunities = NiconicoManager.Instance.GetCommunities();
                 this.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     MakeCommunityList();
@@ -137,38 +143,43 @@ namespace NamaAlert
 
         private void LoadCommunities()
         {
-            string filePath = System.IO.Path.GetFullPath(Utils.GetAppDirectory() + "\\Settings\\Niconico.xml");
-            _settingData = new SettingData();
-            if (System.IO.File.Exists(filePath))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<NiconicoManager.NiconicoAlertItem>));
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(filePath, Encoding.UTF8))
-                {
-                    _nicoCommunities = (List<NiconicoManager.NiconicoAlertItem>)serializer.Deserialize(reader);
-                    reader.Close();
-                }
-            }
+            NiconicoManager.Instance.LoadCommunities();
             MakeCommunityList();
         }
 
         private void SaveCommunities()
         {
-            string filePath = System.IO.Path.GetFullPath(Utils.GetAppDirectory() + "\\Settings\\Niconico.xml");
-            XmlSerializer serializer = new XmlSerializer(typeof(List<NiconicoManager.NiconicoAlertItem>), new Type[] { typeof(NiconicoManager.NiconicoAlertItem) });
-            using (System.IO.StreamWriter writer = new System.IO.StreamWriter(filePath, false))
-            {
-                serializer.Serialize(writer, _nicoCommunities);
-                writer.Close();
-            }
+            NiconicoManager.Instance.SaveCommunities();
         }
 
         private void MakeCommunityList()
         {
-            for (int i = 0; i < _nicoCommunities.Count; i++)
+            for (int i = 0; i < NiconicoManager.Instance.Communities.Count; i++)
             {
-                CommunityListAdd(_nicoCommunities[i]);
+                CommunityListAdd(NiconicoManager.Instance.Communities[i]);
             }
         }
 
+        private void MainWindow_StateChanged(object sender, EventArgs e)
+        {
+            if(this.WindowState == System.Windows.WindowState.Minimized)
+            {
+                GetIn();
+            }
+            else
+            {
+                GetOut();
+            }
+        }
+
+        public void GetIn()
+        {
+            this.ShowInTaskbar = false;
+        }
+
+        public void GetOut()
+        {
+            this.ShowInTaskbar = true;
+        }
     }
 }

@@ -6,12 +6,6 @@
     <Grid MouseDown="Grid_MouseDown">
         <Image x:Name="ImageViewer" HorizontalAlignment="Left" Height="78" Margin="10,10,0,0" VerticalAlignment="Top" Width="78" Stretch="Uniform" />
         <Label x:Name="LabelTitle" Content="Loading..." HorizontalAlignment="Left" Margin="93,10,0,0" VerticalAlignment="Top" Width="190" Foreground="#FF0000D3" FontWeight="Bold"/>
-        <Label x:Name="LabelDescription" Content="Loading..." HorizontalAlignment="Left" Margin="93,43,0,0" VerticalAlignment="Top" Height="45" Width="190">
-            <Label.Resources>
-                <Style TargetType="TextBlock">
-                    <Setter Property="TextWrapping" Value="Wrap" />
-                </Style>
-            </Label.Resources>
-        </Label>
+        <TextBlock x:Name="LabelDescription" HorizontalAlignment="Left" Margin="93,43,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="45" Width="190"/>
     </Grid>
 </Controls:MetroWindow>

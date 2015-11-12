@@ -26,6 +26,11 @@ namespace NamaAlert
             ToolTipText = @"Namalert";
             MenuItemOpen.Click += MenuItemOpen_Click;
             MenuItemExit.Click += MenuItemExit_Click;
+
+            _mainWindow.Show();
+            _mainWindow.Initialize();
+            _mainWindow.Hide();
+            _mainWindow.GetIn();
         }
 
         private void MenuItemExit_Click(object sender, EventArgs e)

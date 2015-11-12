@@ -27,7 +27,7 @@ namespace NamaAlert
         public string InfomationDescription { get { return _description; } set
             {
                 _description = value;
-                LabelDescription.Content = _description;
+                LabelDescription.Text = _description;
             }
         }
 
@@ -75,7 +75,10 @@ namespace NamaAlert
             if (_url != null)
             {
                 System.Diagnostics.Process.Start(@_url);
+
+                this.Close();
             }
         }
+
     }
 }

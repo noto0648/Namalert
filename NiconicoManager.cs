@@ -73,7 +73,7 @@ namespace NamaAlert
                     for (int i = 0; i < nodeList[0].ChildNodes.Count; i++)
                     {
                         string id = nodeList[0].ChildNodes[i].InnerText;
-                        result.Add(new NiconicoAlertItem() { CommunityId = id, IsChannel = id.StartsWith("co") });
+                        result.Add(new NiconicoAlertItem() { CommunityId = id, IsChannel = !id.StartsWith("co") });
                     }
 
                 }
@@ -114,7 +114,7 @@ namespace NamaAlert
 
         public InfomationType GetInfomationType(string communityid)
         {
-            Console.WriteLine(communityid);
+            //Console.WriteLine(communityid);
             lock (_lock)
             {
                 NiconicoAlertItem index = _nicoCommunities.Find(w => w.CommunityId == communityid);

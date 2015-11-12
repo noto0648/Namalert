@@ -31,6 +31,31 @@ namespace NamaAlert
             InitializeComponent();
         }
 
+        public void Initialize()
+        {
+            string filePath = System.IO.Path.GetFullPath(Utils.GetAppDirectory() + "\\Settings\\Base.xml");
+            _settingData = new SettingData();
+            if (System.IO.File.Exists(filePath))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(SettingData));
+                using (System.IO.StreamReader reader = new System.IO.StreamReader(filePath, Encoding.UTF8))
+                {
+                    _settingData = (SettingData)serializer.Deserialize(reader);
+                    reader.Close();
+                }
+            }
+
+            TextBoxNiconicoMailAddress.Text = _settingData.NiconicoMailaddress;
+            PasswordNiconico.Password = _settingData.NiconicoPassword;
+            CheckBoxRunningStart.IsChecked = _settingData.AutoRun;
+            LoadCommunities();
+
+            if(_settingData.AutoRun)
+            {
+                NiconicoAlertStart();
+            }
+        }
+
 
         private void ButtonAlertStart_Click(object sender, RoutedEventArgs e)
         {
@@ -72,14 +97,14 @@ namespace NamaAlert
         }
 
 
-        private void CommunityListAdd(NiconicoManager.NiconicoAlertItem n)
+        private void CommunityListAdd(ListView listView, NiconicoManager.NiconicoAlertItem n)
         {
-            if (NiconicoCommunityList.DataContext == null)
+            if (listView.DataContext == null)
             {
-                NiconicoCommunityList.DataContext = new CollectionViewSource();
-                (NiconicoCommunityList.DataContext as CollectionViewSource).Source = new ObservableCollection<NiconicoManager.NiconicoAlertItem>();
+                listView.DataContext = new CollectionViewSource();
+                (listView.DataContext as CollectionViewSource).Source = new ObservableCollection<NiconicoManager.NiconicoAlertItem>();
             }
-            ((ObservableCollection<NiconicoManager.NiconicoAlertItem>)((CollectionViewSource)NiconicoCommunityList.DataContext).Source).Add(n);
+            ((ObservableCollection<NiconicoManager.NiconicoAlertItem>)((CollectionViewSource)listView.DataContext).Source).Add(n);
         }
 
         public InfoWindow NewInfomation(int time, string url)
@@ -95,24 +120,7 @@ namespace NamaAlert
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            string filePath = System.IO.Path.GetFullPath(Utils.GetAppDirectory() + "\\Settings\\Base.xml");
-            _settingData = new SettingData();
-            if (System.IO.File.Exists(filePath))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(SettingData));
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(filePath, Encoding.UTF8))
-                {
-                    _settingData = (SettingData)serializer.Deserialize(reader);
-                    reader.Close();
-                }
-            }
 
-            TextBoxNiconicoMailAddress.Text = _settingData.NiconicoMailaddress;
-            PasswordNiconico.Password = _settingData.NiconicoPassword;
-
-            LoadCommunities();
-
-            NiconicoAlertStart();
         }
 
         public SettingData Settings
@@ -156,7 +164,15 @@ namespace NamaAlert
         {
             for (int i = 0; i < NiconicoManager.Instance.Communities.Count; i++)
             {
-                CommunityListAdd(NiconicoManager.Instance.Communities[i]);
+                NiconicoManager.NiconicoAlertItem alertItem = NiconicoManager.Instance.Communities[i];
+                if(alertItem.IsChannel)
+                {
+                    CommunityListAdd(NiconicoChannelList, alertItem);
+                }
+                else
+                {
+                    CommunityListAdd(NiconicoCommunityList, alertItem);
+                }
             }
         }
 
@@ -180,6 +196,19 @@ namespace NamaAlert
         public void GetOut()
         {
             this.ShowInTaskbar = true;
+        }
+
+        private void CheckBoxRunningStart_Checked(object sender, RoutedEventArgs e)
+        {
+            _settingData.AutoRun = (bool)CheckBoxRunningStart.IsChecked;
+        }
+
+        private void ButtonAlertStop_Click(object sender, RoutedEventArgs e)
+        {
+            if (_alertSystem != null && _alertSystem.IsRunning)
+            {
+                _alertSystem.Stop();
+            }
         }
     }
 }

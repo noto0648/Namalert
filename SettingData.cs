@@ -10,6 +10,7 @@ namespace NamaAlert
     {
         public string NiconicoMailaddress { get; set; }
         public string NiconicoPassword { get; set; }
+        public bool AutoRun { get; set; }
 
         public SettingData()
         {

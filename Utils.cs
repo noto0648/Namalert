@@ -43,7 +43,7 @@ namespace NamaAlert
             webReq.Method = "POST";
             webReq.ContentType = "application/x-www-form-urlencoded";
             webReq.ContentLength = data.Length;
-            webReq.UserAgent = "Namaralert1.0.0.0";
+            webReq.UserAgent = "Namalert1.0.0.0";
 
             using (Stream reqStream = webReq.GetRequestStream())
             {
